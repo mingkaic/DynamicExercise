@@ -1,0 +1,40 @@
+extends layout
+
+block content
+	h1=title
+	p Welcome to #{title}
+
+	div(ng-controller='controller')
+		button(ng-click='search()') Show Only
+		select#target
+			option(ng-repeat='target in targets', value='{{target}}') {{target}}
+
+		table(class='table')
+			thead
+				th Title
+				th Target Area
+				th Note
+				th Created On
+				th
+			tbody
+				tr
+					td
+						input(type='text', class='form-control' ng-model='exercise.title')
+					td
+						input(type='text', class='form-control' ng-model='exercise.targetArea')
+					td
+						input(type='text', class='form-control' ng-model='exercise.note')
+					td
+					td
+						button.btn.btn-primary(ng-click='addExercise()') Add Exercise
+					td
+						button.btn.btn-info(ng-click='update()') Update
+				tr(ng-repeat='exercise in exerciseList')
+					td {{exercise.title}}
+					td {{exercise.targetArea}}
+					td {{exercise.note}}
+					td {{exercise.created | date}}
+					td
+						button.btn.btn-danger(ng-click='removeExercise(exercise._id)') Remove
+					td
+						button.btn.btn-warning(ng-click='editExercise(exercise._id)') Edit
