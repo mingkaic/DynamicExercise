@@ -53,8 +53,8 @@ router.put('/:id', function(req, res, next) {
 
 // obtain all existing targetAreas
 router.get('/exercise/targetArea', function(req, res, next) {
-	var group = {targetArea: '$targetArea'};
-	exerciseService.aggregate({}, group, function(err, docs) {
+	// count the targetAreas in the database via aggregation
+	exerciseService.aggregate({}, {_id: '$targetArea'}, function(err, docs) {
 		if (err) return res.json(err);
 		res.json(docs);
 	});

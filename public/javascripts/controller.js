@@ -4,8 +4,6 @@ var myApp = angular.module('myApp', []);
 
 myApp.controller('controller', ['$scope', '$http', function($scope, $http) {
 
-	$scope.targets = ['all', 'bicep', 'tricep', 'chest'];
-
 	var clear = function() {
 		$scope.exercise = {
 			_id: "",
@@ -20,15 +18,16 @@ myApp.controller('controller', ['$scope', '$http', function($scope, $http) {
 		$http.get('/exercise').success(function(response) {
 			$scope.exerciseList = response;
 		});
-	};
 
-	var filter = function() {
 		$http.get('/exercise/targetArea').success(function(response) {
-			console.log(response);
+			$scope.targets = ['all'];
+
+			for (i=0; i<response.length; i++) {
+				$scope.targets.push(response[i]._id);
+			}
 		});
 	};
 
-	filter();
 	refresh();
 	clear();
 
@@ -64,7 +63,17 @@ myApp.controller('controller', ['$scope', '$http', function($scope, $http) {
 	};
 
 	$scope.search = function() {
-		console.log($('#target').val());
+		var display = $('#target').val();
+
+		if (!display || display==='all') {
+			refresh();
+		} else {
+			var criteria = JSON.stringify({targetArea: display});
+
+			$http.get('/'+criteria).success(function(response) {
+				$scope.exerciseList = response;
+			});
+		}
 	};
 }]);
 

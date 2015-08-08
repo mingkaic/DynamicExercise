@@ -30,7 +30,7 @@ exports.removeExercise = function(exerciseid, next) {
 exports.changeExercise = function(req, next) {
 	var id = mongojs.ObjectId(req.params.id);
 	var exercise = req.body;
-	
+
 	Exercise.update({_id: id}, {
 		title : exercise.title,
 		targetArea : exercise.targetArea,
@@ -47,13 +47,10 @@ exports.findExercise = function(criteria, next) {
 };
 
 exports.aggregate = function(match, group, next) {
-	var EAgg = Exercise.aggregate([
-			{$match: { }},
-			{$group: { targetArea: '$targetArea' }}
-		]);
-	console.log(EAgg);
-	EAgg.toArray(function(err, docs) {
-		console.log(err);
+	Exercise.aggregate([
+		{$match: match},
+		{$group: group}
+	], function(err, docs) {
 		next(err, docs);
 	});
 };
